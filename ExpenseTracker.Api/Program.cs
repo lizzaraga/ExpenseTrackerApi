@@ -26,19 +26,27 @@ builder.Services.AddSwaggerGen(o =>
         Contact = new OpenApiContact(){ Email = "fomekongchristmael@gmail.com", Name = "Mael Fomekong"}
     });
 
-    var securityScheme = new OpenApiSecurityScheme()
+    var jwtSecurityScheme = new OpenApiSecurityScheme
     {
+        BearerFormat = "JWT",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "Bearer"
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
     };
-    
-    o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme(securityScheme));
-    o.AddSecurityRequirement(new OpenApiSecurityRequirement()
+
+    o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, jwtSecurityScheme);
+
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        { securityScheme, [ "Bearer" ] }
+        { jwtSecurityScheme, Array.Empty<string>() }
     });
 });
 

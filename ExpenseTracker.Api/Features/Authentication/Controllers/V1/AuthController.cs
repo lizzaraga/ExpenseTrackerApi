@@ -17,9 +17,24 @@ public class AuthController(
 {
 
     [HttpPost("Login")]
-    public IActionResult Login(LoginReqDto request)
+    public async Task<IActionResult> Login(LoginReqDto request)
     {
-        return Ok();
+        var existingUser = await userManager.FindByEmailAsync(request.Email);
+        if (existingUser is null)
+        {
+            ModelState.AddModelError("Error", "Unauthorized ! Bad credentials");
+            return new UnauthorizedObjectResult(ModelState);
+        }
+
+        var passwordIsCorrect = await userManager.CheckPasswordAsync(existingUser, request.Password);
+        if (!passwordIsCorrect)
+        {
+            ModelState.AddModelError("Error", "Unauthorized ! Bad credentials");
+            return new UnauthorizedObjectResult(ModelState);
+        }
+
+        return Ok(await authService.Login(existingUser));
+        
     }
 
     [HttpPost("Register")]
