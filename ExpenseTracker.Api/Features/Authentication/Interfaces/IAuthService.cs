@@ -6,4 +6,5 @@ namespace ExpenseTracker.Api.Features.Authentication.Interfaces;
 public interface IAuthService
 {
     Task<UserToken> Login(UserAccount userAccount);
+    Task<bool> Register(String email, string password);
 }

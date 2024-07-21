@@ -1,6 +1,11 @@
 using System.Text;
+using ExpenseTracker.Api.Features.Authentication.Configuration;
+using ExpenseTracker.Api.Features.Authentication.Interfaces;
+using ExpenseTracker.Api.Features.Authentication.Services;
 using ExpenseTracker.Database;
+using ExpenseTracker.Database.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -55,13 +60,32 @@ builder.Services.AddDbContext<ExpenseTrackerDbContext>(o =>
 
 #endregion
 
+#region Configure Identity
+
+builder.Services.AddIdentity<UserAccount, IdentityRole>(options =>
+    {
+        options.SignIn.RequireConfirmedEmail = true;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+    })
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<ExpenseTrackerDbContext>();
+
+#endregion
+
 #region Configure JWT
 
-builder.Services.AddAuthentication(builder =>
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("Jwt"));
+
+builder.Services.AddAuthentication(options =>
 {
-    builder.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    builder.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    builder.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
     options.SaveToken = true;
@@ -81,6 +105,11 @@ builder.Services.AddAuthorization();
 
 #endregion
 
+#region Configure Services
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+#endregion
 
 var app = builder.Build();
 

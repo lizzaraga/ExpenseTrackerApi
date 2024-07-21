@@ -1,4 +1,5 @@
 using ExpenseTracker.Database.Entities;
+using ExpenseTracker.Database.Interfaces;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +13,51 @@ public class ExpenseTrackerDbContext(DbContextOptions<ExpenseTrackerDbContext> o
     public DbSet<PocketExpenseHistory> PocketExpenseHistories { get; set; }
     public DbSet<PursePocketTransfer> PursePocketTransfers { get; set; }
     public DbSet<PocketPocketTransfer> PocketPocketTransfers { get; set; }
-    
-    protected override void OnModelCreating(ModelBuilder builder)
+
+    public override int SaveChanges()
     {
-        base.OnModelCreating(builder);
+        UpdateDateTrackedEntities();
+        return base.SaveChanges();
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        UpdateDateTrackedEntities();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+    {
+        UpdateDateTrackedEntities();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        UpdateDateTrackedEntities();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+    
+
+    private void UpdateDateTrackedEntities()
+    {
+        ChangeTracker.Entries<IDateTrackedEntity>().Where(entry => entry.State == EntityState.Added || entry.State == EntityState.Modified)
+            .ToList()
+            .ForEach(entry =>
+            {
+                var now = DateTime.UtcNow;
+                if (entry.State == EntityState.Added)
+                {
+                    IDateTrackedEntity entity = entry.Entity;
+                    entity.CreatedAt = now;
+                    entity.UpdatedAt = now;
+                }
+                else
+                {
+                    IDateTrackedEntity entity = entry.Entity;
+                    entity.UpdatedAt = now;
+                }
+                
+            } );
     }
 }
