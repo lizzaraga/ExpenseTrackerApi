@@ -1,0 +1,14 @@
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\bin\Debug\net8.0\ExpenseTracker.Database.deps.json
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\bin\Debug\net8.0\ExpenseTracker.Database.dll
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\bin\Debug\net8.0\ExpenseTracker.Database.pdb
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.csproj.AssemblyReference.cache
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.AssemblyInfoInputs.cache
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.AssemblyInfo.cs
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.csproj.CoreCompileInputs.cache
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.dll
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\refint\ExpenseTracker.Database.dll
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.pdb
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ref\ExpenseTracker.Database.dll
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\bin\Debug\net8.0\ExpenseTracker.Database.runtimeconfig.json
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Database\obj\Debug\net8.0\ExpenseTracker.Database.genruntimeconfig.cache

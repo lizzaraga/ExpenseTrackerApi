@@ -1,0 +1,6 @@
+﻿services:
+  expensetracker.api:
+    image: expensetracker.api
+    build:
+      context: .
+      dockerfile: ExpenseTracker.Api/Dockerfile
