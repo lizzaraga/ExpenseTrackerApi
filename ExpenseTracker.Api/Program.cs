@@ -2,6 +2,9 @@ using System.Text;
 using ExpenseTracker.Api.Features.Authentication.Configuration;
 using ExpenseTracker.Api.Features.Authentication.Interfaces;
 using ExpenseTracker.Api.Features.Authentication.Services;
+using ExpenseTracker.Api.Features.Configurations;
+using ExpenseTracker.Api.Features.Purses.Interfaces;
+using ExpenseTracker.Api.Features.Purses.Services;
 using ExpenseTracker.Database;
 using ExpenseTracker.Database.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,29 +29,33 @@ builder.Services.AddSwaggerGen(o =>
         Contact = new OpenApiContact(){ Email = "fomekongchristmael@gmail.com", Name = "Mael Fomekong"}
     });
 
-    var jwtSecurityScheme = new OpenApiSecurityScheme
+    var securityScheme = new OpenApiSecurityScheme()
     {
-        BearerFormat = "JWT",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
-
-        Reference = new OpenApiReference
+        Reference = new OpenApiReference()
         {
             Id = JwtBearerDefaults.AuthenticationScheme,
             Type = ReferenceType.SecurityScheme
-        }
+        },
+        Type = SecuritySchemeType.Http,
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        BearerFormat = "JWT",
+        Description = "Just enter the Bearer Token",
+        Scheme = JwtBearerDefaults.AuthenticationScheme
     };
-
-    o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, jwtSecurityScheme);
-
-    o.AddSecurityRequirement(new OpenApiSecurityRequirement
+    o.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
-        { jwtSecurityScheme, Array.Empty<string>() }
+        { securityScheme, Array.Empty<string>() }
     });
 });
+
+#region Configure Auto Mapper
+
+builder.Services.AddAutoMapper(o => o.AddProfile<AutoMapperProfile>(),
+    AppDomain.CurrentDomain.GetAssemblies());
+
+#endregion
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -116,6 +123,8 @@ builder.Services.AddAuthorization();
 #region Configure Services
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPurseIncomeService, PurseIncomeHistoryService>();
+builder.Services.AddScoped<IPurseService, PurseService>();
 
 #endregion
 

@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using ExpenseTracker.Api.Features.Authentication.Configuration;
 using ExpenseTracker.Api.Features.Authentication.Dtos;
@@ -18,11 +19,17 @@ public class AuthService(
     public Task<UserToken> Login(UserAccount userAccount)
     {
         var expiresAt = DateTime.UtcNow.AddMinutes(10);
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Email, userAccount.Email!),
+            new Claim(ClaimTypes.Sid, userAccount.Id!),
+        };
         var securityToken = new JwtSecurityToken(
             issuer: jwtConfigOptions.Value.Issuer,
             audience: jwtConfigOptions.Value.Audience,
             notBefore: DateTime.UtcNow,
             expires: expiresAt,
+            claims: claims,
             signingCredentials: new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfigOptions.Value.Secret)),
                 SecurityAlgorithms.HmacSha256

@@ -124,3 +124,4 @@ C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Api\bin\Debug\net8.0\
 C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Api\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.Newtonsoft.dll
 C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\fomek\RiderProjects\ExpenseTracker\ExpenseTracker.Api\bin\Debug\net8.0\AutoMapper.dll
