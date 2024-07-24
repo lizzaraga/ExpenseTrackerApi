@@ -10,7 +10,7 @@ public class PurseIncomeHistoryService(
     ExpenseTrackerDbContext dbContext
     ): IPurseIncomeService
 {
-    public async Task<Purse> IncreaseIncome(Purse purse, double amount)
+    public Task<Purse> IncreaseIncome(Purse purse, double amount)
     {
         using (var scope = new TransactionScope())
         {
@@ -23,16 +23,17 @@ public class PurseIncomeHistoryService(
                 };
                 dbContext.PurseIncomeHistories.Add(purseIncome);
                 purse.Balance += amount;
-
-                await dbContext.SaveChangesAsync();
-            
-                scope.Complete();
-                return purse;
+                dbContext.SaveChanges();
+                return Task.FromResult(purse);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
+            }
+            finally
+            {
+                scope.Complete();
             }
         }
         

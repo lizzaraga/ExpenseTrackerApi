@@ -25,13 +25,16 @@ public class PocketService(
             try
             {
                 dbContext.Pockets.Add(pocket);
-                await dbContext.SaveChangesAsync();
-                scope.Complete();
+                dbContext.SaveChanges();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
+            }
+            finally
+            {
+                scope.Complete();
             }
         }
 

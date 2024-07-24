@@ -22,14 +22,18 @@ public class PurseService(
             try
             {
                 dbContext.Purses.Add(purse);
-                await dbContext.SaveChangesAsync();
-                scope.Complete();
+                dbContext.SaveChanges();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
             }
+            finally
+            {
+                scope.Complete();
+            }
+            
         }
 
         if (dto.InitialBalance > 0)

@@ -73,4 +73,48 @@ public class TransfersController(
         var result = await transferService.MakePocketToPurseTransfer(pocket, purse, request.Amount);
         return result.Item3;
     }
+    
+    [HttpPost("PocketToPocket")]
+    public async Task<ActionResult<PocketPocketTransfer>> TransferFromPocketToPocket(
+        [FromBody] InterPocketTransferDto request
+    )
+    {
+        var fromPocket = dbContext.Pockets.FirstOrDefault(x => x.Id.Equals(request.FromPocketId));
+        if (fromPocket is null)
+        {
+            ModelState.AddModelError("error", "Pocket emitter not found");
+            return BadRequest(ModelState);
+        }
+        
+        if (request.Amount > fromPocket.Balance)
+        {
+            ModelState.AddModelError("error", "The amount is greater than corresponding pocket emitter balance !");
+            return BadRequest(ModelState);
+        }
+        
+        var toPocket = dbContext.Pockets.FirstOrDefault(x => x.Id.Equals(request.ToPocketId));
+        if (toPocket is null)
+        {
+            ModelState.AddModelError("error", "Pocket receiver not found");
+            return BadRequest(ModelState);
+        }
+        if (!fromPocket.PurseId.Equals(toPocket.PurseId))
+        {
+            ModelState.AddModelError("error", "Your pockets don't come from the same purse");
+            return BadRequest(ModelState);
+        }
+        
+        
+        var purse = dbContext.Purses.FirstOrDefault(x => x.Id.Equals(fromPocket.PurseId));
+        if (purse is null)
+        {
+            ModelState.AddModelError("error", "Purse not found");
+            return BadRequest(ModelState);
+        }
+        
+        
+
+        var result = await transferService.MakePocketToPocketTransfer(purse, fromPocket, toPocket, request.Amount);
+        return result.Item3;
+    }
 }

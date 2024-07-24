@@ -10,7 +10,7 @@ public class TransferService(
     ExpenseTrackerDbContext dbContext
     ): ITransferService
 {
-    public async Task<(Purse, Pocket, PursePocketTransfer)> MakePurseToPocketTransfer(Pocket pocket, Purse purse, double amount)
+    public Task<(Purse, Pocket, PursePocketTransfer)> MakePurseToPocketTransfer(Pocket pocket, Purse purse, double amount)
     {
         using (var scope = new TransactionScope())
         {
@@ -28,19 +28,23 @@ public class TransferService(
                     Purse = purse
                 };
                 dbContext.PursePocketTransfers.Add(pursePocketTransfer);
-                await dbContext.SaveChangesAsync();
-                scope.Complete();
-                return (purse, pocket, pursePocketTransfer);
+                dbContext.SaveChanges();
+                return Task.FromResult((purse, pocket, pursePocketTransfer));
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
             }
+            finally
+            {
+                scope.Complete();
+            }
+            
         }
     }
 
-    public async Task<(Purse, Pocket, PursePocketTransfer)> MakePocketToPurseTransfer(Pocket pocket, Purse purse, double amount)
+    public Task<(Purse, Pocket, PursePocketTransfer)> MakePocketToPurseTransfer(Pocket pocket, Purse purse, double amount)
     {
         using (var scope = new TransactionScope())
         {
@@ -58,14 +62,54 @@ public class TransferService(
                     Purse = purse
                 };
                 dbContext.PursePocketTransfers.Add(pursePocketTransfer);
-                await dbContext.SaveChangesAsync();
-                scope.Complete();
-                return (purse, pocket, pursePocketTransfer);
+                dbContext.SaveChanges();
+                return Task.FromResult((purse, pocket, pursePocketTransfer));
             }
             catch (Exception e)
             {
+                
                 Console.WriteLine(e);
                 throw;
+            }
+            finally
+            {
+                scope.Complete();
+            }
+        }
+    }
+
+    public Task<(Pocket From, Pocket To, PocketPocketTransfer)> MakePocketToPocketTransfer(Purse purse, Pocket from, Pocket to, double amount)
+    {
+        using (var scope = new TransactionScope())
+        {
+
+            try
+            {
+                from.Balance -= amount;
+                to.Balance += amount;
+                dbContext.Update(from);
+                dbContext.Update(to);
+                var pocketPocketTransfer = new PocketPocketTransfer()
+                {
+                    Amount = amount,
+                    From = from,
+                    To = to,
+                    Purse = purse
+                };
+                dbContext.PocketPocketTransfers.Add(pocketPocketTransfer);
+                dbContext.SaveChanges();
+
+                return Task.FromResult((from, to, pocketPocketTransfer));
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+                throw;
+            }
+            finally
+            {
+                scope.Complete();
             }
         }
     }
