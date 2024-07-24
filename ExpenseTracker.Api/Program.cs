@@ -2,9 +2,13 @@ using System.Text;
 using ExpenseTracker.Api.Features.Authentication.Configuration;
 using ExpenseTracker.Api.Features.Authentication.Interfaces;
 using ExpenseTracker.Api.Features.Authentication.Services;
-using ExpenseTracker.Api.Features.Configurations;
+using ExpenseTracker.Api.Configurations;
+using ExpenseTracker.Api.Features.Pockets.Interfaces;
+using ExpenseTracker.Api.Features.Pockets.Services;
 using ExpenseTracker.Api.Features.Purses.Interfaces;
 using ExpenseTracker.Api.Features.Purses.Services;
+using ExpenseTracker.Api.Features.Transfers.Interfaces;
+using ExpenseTracker.Api.Features.Transfers.Services;
 using ExpenseTracker.Database;
 using ExpenseTracker.Database.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -125,6 +129,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPurseIncomeService, PurseIncomeHistoryService>();
 builder.Services.AddScoped<IPurseService, PurseService>();
+builder.Services.AddScoped<ITransferService, TransferService>();
+builder.Services.AddScoped<IPocketService, PocketService>();
 
 #endregion
 

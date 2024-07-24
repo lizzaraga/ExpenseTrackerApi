@@ -21,6 +21,6 @@ public class PursePocketTransfer: IDateTrackedEntity
 
 public enum PursePocketTransferMode: byte
 {
-    PurseToPocket = 0x01,
-    PocketToPurse =  0x10
+    PurseToPocket = 0b01,
+    PocketToPurse =  0b10
 }
