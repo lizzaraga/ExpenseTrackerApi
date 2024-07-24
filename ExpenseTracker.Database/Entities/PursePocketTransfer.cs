@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ExpenseTracker.Database.Interfaces;
 
 namespace ExpenseTracker.Database.Entities;
@@ -21,6 +22,8 @@ public class PursePocketTransfer: IDateTrackedEntity
 
 public enum PursePocketTransferMode: byte
 {
+    [JsonPropertyName("PurseToPocket")]
     PurseToPocket = 0b01,
+    [JsonPropertyName("PocketToPurse")]
     PocketToPurse =  0b10
 }
