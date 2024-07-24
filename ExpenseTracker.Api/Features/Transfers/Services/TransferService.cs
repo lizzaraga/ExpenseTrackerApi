@@ -10,7 +10,7 @@ public class TransferService(
     ExpenseTrackerDbContext dbContext
     ): ITransferService
 {
-    public async Task<(Purse, Pocket)> MakePurseToPocketTransfer(Pocket pocket, Purse purse, double amount)
+    public async Task<(Purse, Pocket, PursePocketTransfer)> MakePurseToPocketTransfer(Pocket pocket, Purse purse, double amount)
     {
         using (var scope = new TransactionScope())
         {
@@ -30,7 +30,7 @@ public class TransferService(
                 dbContext.PursePocketTransfers.Add(pursePocketTransfer);
                 await dbContext.SaveChangesAsync();
                 scope.Complete();
-                return (purse, pocket);
+                return (purse, pocket, pursePocketTransfer);
             }
             catch (Exception e)
             {
