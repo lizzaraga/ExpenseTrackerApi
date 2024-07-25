@@ -6,4 +6,5 @@ namespace ExpenseTracker.Api.Features.Pockets.Interfaces;
 public interface IPocketService
 {
     Task<Pocket> CreatePocket(CreatePocketDto dto, Purse parent);
+    Task<Pocket> MakeExpense(Pocket pocket, double amount);
 }

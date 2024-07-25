@@ -46,4 +46,31 @@ public class PocketService(
 
         return pocket;
     }
+
+    public Task<Pocket> MakeExpense(Pocket pocket, double amount)
+    {
+        using (var scope = new TransactionScope())
+        {
+            try
+            {
+                pocket.Balance -= amount;
+                dbContext.Update(pocket);
+                var pocketExpense = new PocketExpenseHistory()
+                {
+                    NextPocketBalance = pocket.Balance,
+                    Amount = amount,
+                    Pocket = pocket
+                };
+                dbContext.PocketExpenseHistories.Add(pocketExpense);
+                dbContext.SaveChanges();
+                return Task.FromResult(pocket);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            finally{ scope.Complete(); }
+        }
+    }
 }

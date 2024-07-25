@@ -6,8 +6,9 @@ namespace ExpenseTracker.Database.Entities;
 public class PocketExpenseHistory: IDateTrackedEntity
 {
     public Guid Id { get; set; }
-    public double Amount { get; set; }
-    
+    public required double Amount { get; set; }
+
+    public required double NextPocketBalance { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 

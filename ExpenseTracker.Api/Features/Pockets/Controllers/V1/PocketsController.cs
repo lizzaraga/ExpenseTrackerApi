@@ -38,4 +38,24 @@ public class PocketsController(
         var result = await pocketService.CreatePocket(request, purseParent);
         return Ok(result);
     }
+
+    [HttpPost("MakeExpense")]
+    public async Task<ActionResult<Pocket>> MakeExpense([FromBody] PocketExpenseDto request)
+    {
+        var pocket = dbContext.Pockets.FirstOrDefault(p => p.Id.Equals(request.PocketId));
+        if (pocket is null)
+        {
+            ModelState.AddModelError("error", "Unable to find pocket !");
+            return BadRequest(ModelState);
+        }
+
+        if (request.Amount > pocket.Balance)
+        {
+            ModelState.AddModelError("error", "The initial balance is greater than corresponding pocket balance !");
+            return BadRequest(ModelState);
+        }
+
+        var result = await pocketService.MakeExpense(pocket, request.Amount);
+        return Ok(result);
+    }
 }

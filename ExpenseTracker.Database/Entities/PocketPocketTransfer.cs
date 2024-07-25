@@ -8,6 +8,8 @@ public class PocketPocketTransfer: IDateTrackedEntity
     public Guid Id { get; set; }
 
     public required double Amount { get; set; }
+    public required double FromPocketNextBalance { get; set; }
+    public required double ToPocketNextBalance { get; set; }
     
     [ForeignKey("FromPocketId")]
     public virtual required Pocket From { get; set; }

@@ -23,6 +23,8 @@ public class TransferService(
                 var pursePocketTransfer = new PursePocketTransfer()
                 {
                     Amount = amount,
+                    NextPocketBalance = pocket.Balance,
+                    NextPurseBalance = purse.Balance,
                     Mode = PursePocketTransferMode.PurseToPocket,
                     Pocket = pocket,
                     Purse = purse
@@ -56,6 +58,8 @@ public class TransferService(
                 dbContext.Update(purse);
                 var pursePocketTransfer = new PursePocketTransfer()
                 {
+                    NextPocketBalance = pocket.Balance,
+                    NextPurseBalance = purse.Balance,
                     Amount = amount,
                     Mode = PursePocketTransferMode.PocketToPurse,
                     Pocket = pocket,
@@ -91,6 +95,8 @@ public class TransferService(
                 dbContext.Update(to);
                 var pocketPocketTransfer = new PocketPocketTransfer()
                 {
+                    FromPocketNextBalance = from.Balance,
+                    ToPocketNextBalance = to.Balance,
                     Amount = amount,
                     From = from,
                     To = to,

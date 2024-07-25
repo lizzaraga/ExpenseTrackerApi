@@ -7,6 +7,8 @@ public class PursePocketTransfer: IDateTrackedEntity
 {
     public Guid Id { get; set; }
     public required double Amount { get; set; }
+    public required double NextPurseBalance { get; set; }
+    public required double NextPocketBalance { get; set; }
     public required PursePocketTransferMode  Mode { get; set; } 
 
     public Guid PurseId { get; set; }

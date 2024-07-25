@@ -16,13 +16,15 @@ public class PurseIncomeHistoryService(
         {
             try
             {
+                
+                purse.Balance += amount;
                 var purseIncome = new PurseIncomeHistory()
                 {
+                    NextPurseBalance = purse.Balance,
                     Amount = amount,
                     Purse = purse
                 };
                 dbContext.PurseIncomeHistories.Add(purseIncome);
-                purse.Balance += amount;
                 dbContext.SaveChanges();
                 return Task.FromResult(purse);
             }
