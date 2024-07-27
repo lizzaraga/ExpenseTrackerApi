@@ -42,4 +42,10 @@ public class PurseService(
         }
         return purse;
     }
+
+    public Task<IEnumerable<Purse>> GetUserPurses(string ownerId)
+    {
+        var result = dbContext.Purses.Where(p => p.UserAccountId.Equals(ownerId)).ToList();
+        return Task.FromResult(result.AsEnumerable());
+    }
 }

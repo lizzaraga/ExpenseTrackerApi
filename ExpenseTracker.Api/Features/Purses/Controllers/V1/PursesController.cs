@@ -5,6 +5,7 @@ using ExpenseTracker.Database.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ExpenseTracker.Api.Features.Purses.Controllers.V1;
 
@@ -23,6 +24,19 @@ public class PursesController(
         var userAccount = await userManager.FindByIdAsync(idClaim.Value);
         ArgumentNullException.ThrowIfNull(userAccount);
         var result = await purseService.CreatePurse(request, userAccount);
+        return Ok(result);
+    }
+
+    [HttpGet("User/{userId}")]
+    public async Task<ActionResult<IEnumerable<Purse>>> GetUserPurses(string userId)
+    {
+        var userAccount = await userManager.FindByIdAsync(userId);
+        if (userAccount is null)
+        {
+            ModelState.AddModelError("error", "User not found !");
+            return BadRequest(ModelState);
+        }
+        var result = purseService.GetUserPurses(userId).Result;
         return Ok(result);
     }
 }
