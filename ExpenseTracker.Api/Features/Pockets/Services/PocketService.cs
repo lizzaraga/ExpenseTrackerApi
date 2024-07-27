@@ -73,4 +73,10 @@ public class PocketService(
             finally{ scope.Complete(); }
         }
     }
+
+    public Task<IEnumerable<Pocket>> GetPursePockets(Guid purseId)
+    {
+        var result = dbContext.Pockets.Where(p => p.PurseId.Equals(purseId)).ToList();
+        return Task.FromResult(result.AsEnumerable());
+    }
 }

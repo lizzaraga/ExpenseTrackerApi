@@ -7,4 +7,6 @@ public interface IPocketService
 {
     Task<Pocket> CreatePocket(CreatePocketDto dto, Purse parent);
     Task<Pocket> MakeExpense(Pocket pocket, double amount);
+
+    Task<IEnumerable<Pocket>> GetPursePockets(Guid purseId);
 }

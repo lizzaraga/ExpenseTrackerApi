@@ -58,4 +58,21 @@ public class PocketsController(
         var result = await pocketService.MakeExpense(pocket, request.Amount);
         return Ok(result);
     }
+
+    [HttpGet("Purse/{purseId:guid}")]
+    public async Task<ActionResult<IEnumerable<Pocket>>> GetPursePockets(Guid purseId)
+    {
+        Claim idClaim = HttpContext.User.Claims.First(c => c.Type.Equals(ClaimTypes.Sid));
+        
+        var ownerPurse =
+            dbContext.Purses.FirstOrDefault(p => p.UserAccountId.Equals(idClaim.Value) && p.Id.Equals(purseId));
+        if (ownerPurse is null)
+        {
+            ModelState.AddModelError("error", "The current user don't have this purse !");
+            return BadRequest(ModelState);
+        }
+        
+        var result = await pocketService.GetPursePockets(ownerPurse.Id);
+        return Ok(result);
+    }
 }
